@@ -1,14 +1,15 @@
+
 terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "2.46.0"
+      version = ">= 3.7.0"
     }
   }
 
   # Update this block with the location of your terraform state file
   backend "azurerm" {
-    resource_group_name  = "devops"
+    resource_group_name  = "rg-terraform-github-actions-state"
     storage_account_name = "terraformgithubactions"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
@@ -18,14 +19,30 @@ terraform {
 
 provider "azurerm" {
   features {}
- # use_oidc = true
- # AZURE_TENANT_ID="d7e0ed3c-6dd3-4e5e-98e2-320b13363c65"
- # AZURE_CLIENT_ID="be54aca7-0bca-412e-82fc-1003caf00f12"
- # AZURE_SUBSCRIPTION_ID="055305ca-e98f-48f2-9e89-04ad7d23a14f"
+  use_oidc = true
 }
 
 # Define any Azure resources to be created here. A simple resource group is shown here as a minimal example.
-resource "azurerm_resource_group" "devops_test" {
-  name     = "devops"
-  location = "West Europe "
+resource "azurerm_resource_group" "rg-aks" {
+  name     = var.resource_group_name
+  location = var.location
+}
+
+# Sample NSG designed to raise a security alert. Delete for any real deployment.
+resource "azurerm_network_security_group" "nsg-fail" {
+  name                = "insecureNSG"
+  location            = azurerm_resource_group.rg-aks.location
+  resource_group_name = azurerm_resource_group.rg-aks.name
+
+  security_rule {
+    name                       = "badrule"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
