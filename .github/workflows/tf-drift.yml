@@ -2,9 +2,9 @@ name: 'Terraform Configuration Drift Detection'
 
 on:
   push: 
-  branches:
+    branches:
     - main
-    pull_request:
+  pull_request:
 
 #Special permissions required for OIDC authentication
 permissions:
