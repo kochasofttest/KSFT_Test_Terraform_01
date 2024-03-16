@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.7.0"
+      version = "2.46.0"
     }
   }
 
@@ -18,7 +18,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  use_oidc = true
+ # use_oidc = true
  # AZURE_TENANT_ID="d7e0ed3c-6dd3-4e5e-98e2-320b13363c65"
  # AZURE_CLIENT_ID="be54aca7-0bca-412e-82fc-1003caf00f12"
  # AZURE_SUBSCRIPTION_ID="055305ca-e98f-48f2-9e89-04ad7d23a14f"
