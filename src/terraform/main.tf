@@ -9,7 +9,7 @@ terraform {
 
   # Update this block with the location of your terraform state file
   backend "azurerm" {
-    resource_group_name  = "rg-terraform-github-actions-state"
+    resource_group_name  = "devops"
     storage_account_name = "terraformgithubactions"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
@@ -23,7 +23,7 @@ provider "azurerm" {
 }
 
 # Define any Azure resources to be created here. A simple resource group is shown here as a minimal example.
-resource "azurerm_resource_group" "rg-aks" {
+resource "azurerm_resource_group" "devops" {
   name     = var.resource_group_name
   location = var.location
 }
@@ -31,8 +31,8 @@ resource "azurerm_resource_group" "rg-aks" {
 # Sample NSG designed to raise a security alert. Delete for any real deployment.
 resource "azurerm_network_security_group" "nsg-fail" {
   name                = "insecureNSG"
-  location            = azurerm_resource_group.rg-aks.location
-  resource_group_name = azurerm_resource_group.rg-aks.name
+  location            = azurerm_resource_group.devops.location
+  resource_group_name = azurerm_resource_group.devops.name
 
   security_rule {
     name                       = "badrule"
